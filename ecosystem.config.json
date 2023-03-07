@@ -1,0 +1,15 @@
+{
+  "apps": [
+    {
+      "name": "aipredict API",
+      "script": "./index.js",
+      "instances": 1,
+      "autorestart": false,
+      "watch": true,
+      "time": true,
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  ]
+}
