@@ -28,9 +28,6 @@ const updatePrediction = async (filter, updateBody) => {
   Object.assign(prediction, updateBody);
   await prediction.save();
   return prediction;
-
-  // const prediction = await Prediction.updateOne(filter, updateBody);
-  // return prediction;
 };
 module.exports = {
   createPrediction,

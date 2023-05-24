@@ -3,7 +3,7 @@ const { password, objectId } = require("./custom.validation");
 
 const createPrediction = {
   body: Joi.object().keys({
-    stock: Joi.string().required(),
+    stock: Joi.string().custom(objectId).required(),
     buyPrice: Joi.number().required(),
     sellPrice: Joi.number().required(),
     currentPrice: Joi.number().required(),

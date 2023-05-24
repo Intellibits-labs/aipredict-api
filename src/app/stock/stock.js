@@ -19,13 +19,20 @@ const searchStocks = catchAsync(async (req, res) => {
   console.log("🚀 ~ file: stock.js:9 ~ searchStocks ~ result", result);
   res.send(result);
 });
+const searchStocks2 = catchAsync(async (req, res) => {
+  const stocks = await stockService.queryStocks(
+    { name: new RegExp(req.params.query, "i") },
+    {}
+  );
+  res.send(stocks);
+});
 const getMetaData = catchAsync(async (req, res) => {
   const result = await stockService.getMetaData(req.params.stock);
   console.log("🚀 ~ file: stock.js:9 ~ searchStocks ~ result", result);
   res.send(result);
 });
 const getStocks = catchAsync(async (req, res) => {
-  let filter = pick(req.query, ["role"]);
+  let filter = pick(req.query, ["role", "status"]);
   const options = pick(req.query, ["sortBy", "limit", "page"]);
   const result = await stockService.queryStocks(filter, options);
   let responseResult = [];
@@ -62,7 +69,7 @@ async function asyncForEach(array, callback) {
   }
 }
 const allStocks = catchAsync(async (req, res) => {
-  let filter = pick(req.query, ["role"]);
+  let filter = pick(req.query, ["role", "status"]);
   const result = await stockService.findStocks(filter);
   res.send(result);
 });
@@ -100,5 +107,6 @@ module.exports = {
   getStocks,
   getMetaData,
   searchStock,
-  allStocks
+  allStocks,
+  searchStocks2
 };

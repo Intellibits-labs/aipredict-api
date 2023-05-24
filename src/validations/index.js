@@ -7,3 +7,4 @@ module.exports.settingsValidation = require("./settings.validation");
 module.exports.notificationValidation = require("./notification.validation");
 module.exports.predictionValidation = require("./prediction.validation");
 module.exports.holidayValidation = require("./holiday.validation");
+module.exports.stockLogValidation = require("./stockLog.validation");

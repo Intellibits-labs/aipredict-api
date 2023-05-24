@@ -28,37 +28,39 @@ const newPrediction = catchAsync(async (req, res) => {
       "Prediction creation limit exceeded"
     );
   }
-  const stockData = await stockService.getStockBySymbol(req.body.stock);
-  console.log(
-    "🚀 ~ file: prediction.js:10 ~ newPrediction ~ stockData",
-    stockData
-  );
+  // const stockData = await stockService.getStockBySymbol(req.body.stock);
 
-  if (!stockData) {
-    const stockInfo = await stockService.searchStocks(req.body.stock);
-    console.log(
-      "🚀 ~ file: prediction.js:12 ~ newPrediction ~ stockInfo",
-      stockInfo
-    );
-    if (stockInfo.bestMatches.length == 1) {
-      Object.keys(stockInfo.bestMatches[0]).forEach(function (key) {
-        var newkey = key.split(" ")[1];
-        console.log("🚀 ~ file: prediction.js:19 ~ newkey", newkey);
-        stockInfo.bestMatches[0][newkey] = stockInfo.bestMatches[0][key];
-        delete stockInfo.bestMatches[0][key];
-      });
-      const stock = await stockService.createStock(stockInfo.bestMatches[0]);
-      req.body.stock = stock._id;
-      const result = await predictionService.createPrediction(req.body);
-      res.status(httpStatus.CREATED).send(result);
-    } else {
-      throw new ApiError(httpStatus.NOT_FOUND, "Stock not found ");
+  // if (!stockData) {
+  //   const stockInfo = await stockService.searchStocks(req.body.stock);
+  //   console.log(
+  //     "🚀 ~ file: prediction.js:12 ~ newPrediction ~ stockInfo",
+  //     stockInfo
+  //   );
+  //   if (stockInfo.bestMatches.length == 1) {
+  //     Object.keys(stockInfo.bestMatches[0]).forEach(function (key) {
+  //       var newkey = key.split(" ")[1];
+  //       console.log("🚀 ~ file: prediction.js:19 ~ newkey", newkey);
+  //       stockInfo.bestMatches[0][newkey] = stockInfo.bestMatches[0][key];
+  //       delete stockInfo.bestMatches[0][key];
+  //     });
+  //     const stock = await stockService.createStock(stockInfo.bestMatches[0]);
+  //     req.body.stock = stock._id;
+  //     const result = await predictionService.createPrediction(req.body);
+  //     res.status(httpStatus.CREATED).send(result);
+  //   } else {
+  //     throw new ApiError(httpStatus.NOT_FOUND, "Stock not found ");
+  //   }
+  // } else {
+  // req.body.stock = stockData._id;
+  const stockInfo = await stockService.updateStock(
+    { _id: req.body.stock },
+    {
+      status: "ACTIVE"
     }
-  } else {
-    req.body.stock = stockData._id;
-    const result = await predictionService.createPrediction(req.body);
-    res.status(httpStatus.CREATED).send(result);
-  }
+  );
+  const result = await predictionService.createPrediction(req.body);
+  res.status(httpStatus.CREATED).send(result);
+  // }
 });
 const getMyPrediction = catchAsync(async (req, res) => {
   const filter = pick(req.query, ["name", "role"]);

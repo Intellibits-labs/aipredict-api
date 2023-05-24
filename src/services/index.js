@@ -7,4 +7,5 @@ module.exports.settingsService = require("./settings.service");
 module.exports.onesignalService = require("./onesignal.service");
 module.exports.predictionService = require("./prediction.service");
 module.exports.stockService = require("./stock.service");
+module.exports.stockLogService = require("./stockLog.service");
 module.exports.holidayService = require("./holiday.service");

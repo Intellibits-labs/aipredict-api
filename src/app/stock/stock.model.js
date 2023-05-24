@@ -13,31 +13,36 @@ const stockSchema = mongoose.Schema(
     },
     type: {
       type: String,
-      required: true
+      required: false
     },
     region: {
       type: String,
-      required: true
+      required: false
     },
     marketOpen: {
       type: String,
-      required: true
+      required: false
     },
     marketClose: {
       type: String,
-      required: true
+      required: false
     },
     timezone: {
       type: String,
-      required: true
+      required: false
     },
     currency: {
       type: String,
-      required: true
+      required: false
     },
     matchScore: {
       type: String,
-      required: true
+      required: false
+    },
+    status: {
+      type: String,
+      default: "PENDING",
+      enum: ["PENDING", "ACTIVE"]
     },
     image: {
       type: mongoose.Schema.Types.ObjectId,

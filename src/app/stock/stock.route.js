@@ -13,6 +13,11 @@ router.get(
   stockController.searchStocks
 );
 router.get(
+  "/search2/:query",
+  auth("getStockSearch"),
+  stockController.searchStocks2
+);
+router.get(
   "/quote/:stock",
   auth("getStockSearch"),
   stockController.getMetaData

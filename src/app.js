@@ -17,6 +17,7 @@ const path = require("path");
 const swaggerUI = require("swagger-ui-express");
 const swaggerJSDoc = require("swagger-jsdoc");
 const cronjob = require("../cronjob");
+const bodyParser = require("body-parser");
 
 // const webpush = require("web-push");
 
@@ -61,7 +62,7 @@ app.use(
   })
 );
 // set security HTTP headers
-
+app.use(require("express-status-monitor")());
 app.use(helmet({ crossOriginResourcePolicy: false }));
 // webpush.setVapidDetails(
 //   "mailto:vaishnavmtr@gmail.com",
@@ -98,15 +99,21 @@ passport.use("jwt", jwtStrategy);
 //   done(null, obj);
 // });
 // passport.use("google", googleStrategy);
+app.use(bodyParser.json({ limit: "10000kb" }));
+app.use(bodyParser.urlencoded({ limit: "10000kb", extended: true }));
+app.use(bodyParser.urlencoded({ limit: "10000kb", extended: true }));
+
+// console.log(`Current request size limit: ${app.get("json limit")}`);
 
 // limit repeated failed requests to auth endpoints
 if (config.env === "production") {
   app.use("/v1/auth", authLimiter);
 }
-cronjob();
+// cronjob();
 // var assetsPath = "/uploads";
 // app.use(express.static(assetsPath));
-console.log("🚀 ~ file: app.js ~ line 82 ~ (config.env)", config.env);
+// console.log("🚀 ~ file: app.js ~ line 82 ~ (config.env)", config.env);
+
 // console.log(
 //   "Static path:",
 //   path.join(

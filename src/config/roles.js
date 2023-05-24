@@ -23,7 +23,8 @@ roleRights.set(roles[1], [
   "updateMe",
   "updateUser",
   "toggleHoliday",
-  "getHolidays"
+  "getHolidays",
+  "importStockLog"
 ]);
 roleRights.set(roles[2], [
   "me",
