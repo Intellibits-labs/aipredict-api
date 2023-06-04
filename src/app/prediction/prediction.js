@@ -58,6 +58,7 @@ const newPrediction = catchAsync(async (req, res) => {
       status: "ACTIVE"
     }
   );
+  req.body["expectedROI"] = req.body.sellPrice - req.body.buyPrice;
   const result = await predictionService.createPrediction(req.body);
   res.status(httpStatus.CREATED).send(result);
   // }
