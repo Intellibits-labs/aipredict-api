@@ -60,6 +60,7 @@ const newPrediction = catchAsync(async (req, res) => {
   );
   req.body["expectedROI"] =
     (req.body.sellPrice - req.body.buyPrice) / req.body.buyPrice;
+  req.body.tradeDate = moment(req.body.tradeDate);
   const result = await predictionService.createPrediction(req.body);
   res.status(httpStatus.CREATED).send(result);
   // }
@@ -77,8 +78,8 @@ const getPredictions = catchAsync(async (req, res) => {
   const options = pick(req.query, ["sortBy", "limit", "page"]);
 
   const token = req.headers.authorization.replace("Bearer ", "");
-
-  filter["$or"] = [{ status: "COMPLETED" }, { status: "FAILED" }];
+  //uncomment
+  // filter["$or"] = [{ status: "COMPLETED" }, { status: "FAILED" }];
   if (token !== "null" && token) {
     const payload = jwt.verify(token, config.jwt.secret);
 

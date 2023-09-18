@@ -28,7 +28,7 @@ const predictionSchema = mongoose.Schema(
       required: true
     },
     tradeDate: {
-      type: String,
+      type: Date,
       required: true
     },
     note: {

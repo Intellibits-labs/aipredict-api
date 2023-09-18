@@ -130,14 +130,21 @@ const importStockLog = catchAsync(async (req, res) => {
     .then(async (stocks) => {
       result.push(...stocks.filter(Boolean));
 
-      // Second for loop (fetch predictions)
+      // Second for loop (fetch predictions)]
+      const targetDateEnd = new Date(req.body.date);
+      targetDateEnd.setHours(23, 59, 59, 999);
+
       const predictionPromises = [];
       const pendingPredictions = await predictionService.findPrediction({
         status: "PENDING",
         tradeDate: {
-          $lt: new Date()
+          $lte: targetDateEnd
         }
       });
+      console.log(
+        "🚀 ~ file: stockLog.js:141 ~ .then ~ pendingPredictions:",
+        pendingPredictions
+      );
 
       for (let i = 0; i < pendingPredictions.length; i++) {
         const prediction = pendingPredictions[i];
@@ -186,7 +193,7 @@ const importStockLog = catchAsync(async (req, res) => {
             console.log("Return on Investment:", ROR);
           }
         }
-        const predictionPromise = predictionService.updatePrediction(
+        const predictionPromise = await predictionService.updatePrediction(
           { _id: prediction._id },
           { ROI: ROR, status: "COMPLETED" }
         );

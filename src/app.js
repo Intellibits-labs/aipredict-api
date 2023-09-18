@@ -18,6 +18,8 @@ const swaggerUI = require("swagger-ui-express");
 const swaggerJSDoc = require("swagger-jsdoc");
 const cronjob = require("../cronjob");
 const bodyParser = require("body-parser");
+const { predictionService } = require("./services");
+const moment = require("moment");
 
 // const webpush = require("web-push");
 
@@ -133,7 +135,34 @@ app.use("/uploads", express.static(staticPath, { fallthrough: false }));
 app.use("/v1", routes);
 
 app.get("/health-check", async (req, res) => {
-  res.json({ message: "OK" });
+  let predictions = await predictionService.findPrediction({});
+  let predictionsArr = [];
+  for (const prediction of predictions) {
+    console.log(
+      "🚀 ~ file: app.js:139 ~ app.get ~ prediction:",
+      prediction.tradeDate
+    );
+    // Convert tradeDate string to a Date object
+    const tradeDateStr = moment(
+      prediction.tradeDate,
+      "ddd MMM DD YYYY HH:mm:ss [GMT]ZZ"
+    );
+
+    // const tradeDate = moment(tradeDateStr);
+
+    // Update the prediction with the new tradeDate (Date object)
+    const createdAtFormat = "YYYY-MM-DDTHH:mm:ss.SSSZ";
+    prediction.tradeDate = tradeDateStr.format(createdAtFormat);
+    console.log(
+      "🚀 ~ file: app.js:145 ~ app.get ~ prediction:",
+      prediction.tradeDate
+    );
+
+    // Save the updated prediction
+    await prediction.save();
+    predictionsArr.push(prediction);
+  }
+  res.json({ message: "OK", data: predictionsArr });
 });
 // send back a 404 error for any unknown api request
 app.use((req, res, next) => {
